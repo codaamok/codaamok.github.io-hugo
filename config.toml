@@ -8,9 +8,32 @@ theme = "hugo-theme-stack"
     rssFullContent = true
 
     [params.sidebar]
-        emoji = "🤠"
+        emoji = "🙃"
         avatar = "img/avatar.png"
-        subtitle = "Passionate about helping people. Tinkers with on #PowerShell, #ConfigMgr and #Azure. Secretly misses #Linux."
+        subtitle = "Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Secretly misses #Linux."
+
+    [params.defaultImage]
+        [params.defaultImage.article]
+            enabled = false
+            local = false
+            src = ""
+        [params.defaultImage.articleList]
+            enabled = false
+            local = true
+            src = ""
+        [params.defaultImage.opengraph]
+            enabled = false
+            local = false
+            src = ""
+            
+    [params.widgets]
+        enabled = ['archives', 'tag-cloud']
+        [params.widgets.archives]
+            limit = 5
+            ### Archives page relative URL
+            path = "archives"       
+        [params.widgets.tagCloud]
+            limit = 10
 
 [menu]
     [[menu.main]]
@@ -31,17 +54,3 @@ theme = "hugo-theme-stack"
         url = "archives"
         weight = -70
         pre = "archives"
-
-[params.defaultImage]
-        [params.defaultImage.article]
-            enabled = false
-            local = false
-            src = ""
-        [params.defaultImage.articleList]
-            enabled = false
-            local = true
-            src = ""
-        [params.defaultImage.opengraph]
-            enabled = false
-            local = false
-            src = ""
