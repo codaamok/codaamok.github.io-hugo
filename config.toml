@@ -7,29 +7,21 @@ theme = "hugo-theme-stack"
     mainSections = ["post"]
     rssFullContent = true
 
+    [params.defaultImage]
+        [params.defaultImage.opengraph]
+            enabled = false
+            local = false
+            src = ""
+
     [params.sidebar]
         emoji = "🙃"
         avatar = "img/avatar.png"
         subtitle = "Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Secretly misses #Linux."
 
-    [params.defaultImage]
-        [params.defaultImage.article]
-            enabled = false
-            local = false
-            src = ""
-        [params.defaultImage.articleList]
-            enabled = false
-            local = true
-            src = ""
-        [params.defaultImage.opengraph]
-            enabled = false
-            local = false
-            src = ""
-            
     [params.widgets]
         enabled = ['archives', 'tag-cloud']
         [params.widgets.archives]
-            limit = 5
+            limit = 1
             ### Archives page relative URL
             path = "archives"       
         [params.widgets.tagCloud]
