@@ -1,10 +1,11 @@
-baseURL = "new.cookadam.co.uk"
+baseURL = "https://new.cookadam.co.uk"
 languageCode = "en-us"
 title = "Adam Cook"
 theme = "hugo-theme-stack"
 
 [params]
     mainSections = ["post"]
+    rssFullContent = true
 
 
 [menu]
