@@ -1,4 +1,42 @@
 baseURL = "codaamok.github.io"
 languageCode = "en-us"
-title = "codaamok"
-theme = "soho"
+title = "Adam Cook"
+theme = "hugo-theme-stack"
+
+[params]
+    mainSections = ["post"]
+
+
+[menu]
+    [[menu.main]]
+        identifier = "home"
+        name = "Home"
+        url = "/"
+        weight = -100
+        pre = "home"
+    [[menu.main]]
+        identifier = "about-cn"
+        name = "About"
+        url = "about"
+        weight = -90
+        pre = "user"
+    [[menu.main]]
+        identifier = "archives"
+        name = "Archives"
+        url = "archives"
+        weight = -70
+        pre = "archives"
+
+[params.defaultImage]
+        [params.defaultImage.article]
+            enabled = false
+            local = false
+            src = ""
+        [params.defaultImage.articleList]
+            enabled = false
+            local = true
+            src = ""
+        [params.defaultImage.opengraph]
+            enabled = false
+            local = false
+            src = ""
