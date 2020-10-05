@@ -1,4 +1,4 @@
-baseURL = "https://new.cookadam.co.uk"
+baseURL = "https://new.cookadam.co.uk/"
 languageCode = "en-us"
 title = "Adam Cook"
 theme = "hugo-theme-stack"
@@ -6,12 +6,11 @@ theme = "hugo-theme-stack"
 [params]
     mainSections = ["post"]
     rssFullContent = true
-    
+
     [params.sidebar]
         emoji = "🤠"
         avatar = "img/avatar.png"
-        subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-
+        subtitle = "Passionate about helping people. Tinkers with on #PowerShell, #ConfigMgr and #Azure. Secretly misses #Linux."
 
 [menu]
     [[menu.main]]
