@@ -1,0 +1,4 @@
+baseURL = "codaamok.github.io"
+languageCode = "en-us"
+title = "codaamok"
+theme = "soho"
