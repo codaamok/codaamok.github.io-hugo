@@ -33,13 +33,11 @@ disqusShortname = "adam-cook"
         subtitle = "Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Misses #Linux."
 
     [params.widgets]
-        enabled = ['archives', 'tag-cloud']
+        enabled = ['archives']
         [params.widgets.archives]
-            limit = 1
+            limit = 99
             ### Archives page relative URL
-            path = "archives"       
-        [params.widgets.tagCloud]
-            limit = 10
+            path = "archives"
 
     [params.opengraph]
         [params.opengraph.twitter]
@@ -54,11 +52,11 @@ disqusShortname = "adam-cook"
         weight = -100
         pre = "home"
     [[menu.main]]
-        identifier = "about-cn"
-        name = "About"
-        url = "about"
-        weight = -99
-        pre = "user"
+        identifier = "archives"
+        name = "Archives"
+        url = "archives"
+        weight = -98
+        pre = "archives"
     [[menu.main]]
         identifier = "twitter"
         name = "Twitter"
@@ -89,9 +87,4 @@ disqusShortname = "adam-cook"
         url = "https://pssouth.co.uk"
         weight = -80
         pre = "prompt"
-    [[menu.main]]
-        identifier = "archives"
-        name = "Archives"
-        url = "archives"
-        weight = 0
-        pre = "archives"
+    

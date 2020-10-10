@@ -1,8 +1,12 @@
 ---
 title: "Deploying Hugo websites in Azure for pennies or free on GitHub pages"
+slug: "deploying-hugo"
 date: 2020-10-05T21:04:10+01:00
 draft: false
 image: images/cover.jpg
+categories:
+  - Azure
+  - Other
 ---
 
 I recently migrated my WordPress blogging platform to generating static content with Hugo. I no longer pay for hosting. I exclusively use GitHub pages. I am now blogging at no extra cost other than domain renewal!
