@@ -2,7 +2,7 @@
 title: "ConfigMgr hardware inventory troubleshooting"
 date: 2018-10-28T00:00:00+01:00
 draft: false
-image: images/sccm-hardware-inventory-troubleshooting-01.jpg
+image: images/configmgr-hardware-inventory-troubleshooting-01.jpg
 categories:
     - ConfigMgr
 ---
@@ -40,7 +40,7 @@ Software inventory | {00000000-0000-0000-0000-000000000002}
 Data Discovery Record (DDR) | {00000000-0000-0000-0000-000000000003}
 File collection | {00000000-0000-0000-0000-000000000010}
 
-![InventoryAgent.log](images/sccm-hardware-inventory-troubleshooting-01.jpg)
+![InventoryAgent.log](images/configmgr-hardware-inventory-troubleshooting-01.jpg)
 
 Looking at InventoryAgent.log above you can see:
 
@@ -143,17 +143,17 @@ After fixing that and clearing all jobs, I triggered another full hardware inven
 
 Starting off with the IIS logs I saw successful POST from the client, so data uploaded OK.
 
-![IIS log file](images/sccm-hardware-inventory-troubleshooting-02.jpg)
+![IIS log file](images/configmgr-hardware-inventory-troubleshooting-02.jpg)
 
 Next, I want see how the management point handles the report. In the below you can see that it successfully receives it in XML form and parses it into a MIF file, ready to then be parsed by the SMS_INVENTORY_DATA_LOADER and submitted in to the site database. Here, I had no issues.
 
-![MP_Hinv.log](images/sccm-hardware-inventory-troubleshooting-03.jpg)
+![MP_Hinv.log](images/configmgr-hardware-inventory-troubleshooting-03.jpg)
 
 However I had issues with SMS_INVENTORY_DATA_LOADER. Nothing too complicated though, the MIF was just too big than the allowed MIF size. I guess where its a mature server, been in production in a while, accumulated a lot of "things", as well as whatever additional hardware classes is configured client settings for hardware inventory. And the fact it's a full report.
 
 The below suggests my maximum allowed size is 1 byte, this was true just for the purpose of creating this screenshot.
 
-![dataldr.log](images/sccm-hardware-inventory-troubleshooting-04.jpg)
+![dataldr.log](images/configmgr-hardware-inventory-troubleshooting-04.jpg)
 
 On the primary site server I increased `HKLM\Software\Microsoft\SMS\Components\SMS_INVENTORY_DATA_LOADER\Max MIF Size`. The decimal value is in bytes so set it to a value at your discretion, your best gauge is see how far over the limit you are by observing the error in dataldr.log and add a little more. Then restart the SMS_INVENTORY_DATA_LOADER component in Configuration Manager Service Manager (Monitoring > Component Status > Right click any component > Start > Configuration Manager Service Manager).
 

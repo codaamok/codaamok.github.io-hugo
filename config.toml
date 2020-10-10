@@ -4,6 +4,7 @@ DefaultContentLanguage = "en"
 title = "Adam Cook"
 theme = "hugo-theme-stack"
 disqusShortname = "adam-cook"
+enableEmoji = true
 
 [permalinks]
     post = "/p/:slug/"
