@@ -5,13 +5,6 @@ draft: false
 image: images/cover.jpg
 ---
 
-- [What is this Hugo thing?](#what-is-this-hugo-thing)
-- [Prerequisites](#prerequisites)
-- [Azure Static Web Apps](#azure-static-web-apps)
-- [Azure Blob storage](#azure-blob-storage)
-- [GitHub pages](#github-pages)
-- [That is a wrap](#that-is-a-wrap)
-
 I recently migrated my WordPress blogging platform to generating static content with Hugo. I no longer pay for hosting. I exclusively use GitHub pages. I am now blogging at no extra cost other than domain renewal!
 
 In the process not only did I learn about Hugo, but I also looked at three ways to deploy / host my Hugo-made website.
@@ -19,6 +12,13 @@ In the process not only did I learn about Hugo, but I also looked at three ways 
 In this post I want to share with you what Hugo is, why I like it and those three ways that I learned on how to deploy a Hugo website - with Azure Static Web Apps (preview), Azure Blob storage and GitHub pages.
 
 For Azure Static Web Apps and Blob storage, I will be using Cloudflare. I am also assuming you will be using your own domain name. It is not a big deal if you do not want to, just ignore details focused on defining custom domains and creating CNAME records.
+
+- [What is this Hugo thing?](#what-is-this-hugo-thing)
+- [Prerequisites](#prerequisites)
+- [Azure Static Web Apps](#azure-static-web-apps)
+- [Azure Blob storage](#azure-blob-storage)
+- [GitHub pages](#github-pages)
+- [That is a wrap](#that-is-a-wrap)
 
 ## What is this Hugo thing?
 
