@@ -1,11 +1,21 @@
 baseURL = "https://new.cookadam.co.uk/"
 languageCode = "en-us"
+DefaultContentLanguage = "en"
 title = "Adam Cook"
 theme = "hugo-theme-stack"
+disqusShortname = "codaamok"
+
+[permalinks]
+    post = "/p/:slug/"
+    page = "/:slug/"
 
 [params]
     mainSections = ["post"]
     rssFullContent = true
+
+    [params.dateFormat]
+        published = "2 January 2006"
+        lastUpdated = "2 January 2006"
 
     [params.defaultImage]
         [params.defaultImage.opengraph]
@@ -13,10 +23,14 @@ theme = "hugo-theme-stack"
             local = false
             src = ""
 
+    [params.comments]
+        enabled = true
+        provider = "disqus"
+
     [params.sidebar]
         emoji = "🙃"
         avatar = "img/avatar.png"
-        subtitle = "Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Secretly misses #Linux."
+        subtitle = "Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Misses #Linux."
 
     [params.widgets]
         enabled = ['archives', 'tag-cloud']
@@ -26,6 +40,11 @@ theme = "hugo-theme-stack"
             path = "archives"       
         [params.widgets.tagCloud]
             limit = 10
+
+    [params.opengraph]
+        [params.opengraph.twitter]
+            site = "codaamok"
+            card = "summary"
 
 [menu]
     [[menu.main]]
@@ -38,11 +57,41 @@ theme = "hugo-theme-stack"
         identifier = "about-cn"
         name = "About"
         url = "about"
-        weight = -90
+        weight = -99
         pre = "user"
+    [[menu.main]]
+        identifier = "twitter"
+        name = "Twitter"
+        url = "https://twitter.com/codaamok"
+        weight = -93
+        pre = "twitter"
+    [[menu.main]]
+        identifier = "github"
+        name = "GitHub"
+        url = "https://github.com/codaamok"
+        weight = -92
+        pre = "github"
+    [[menu.main]]
+        identifier = "linkedin"
+        name = "LinkedIn"
+        url = "https://linkedin.com/in/adamcharlescook"
+        weight = -91
+        pre = "linkedin"
+    [[menu.main]]
+        identifier = "youtube"
+        name = "YouTube"
+        url = "https://www.youtube.com/channel/UCjv4o4ToaauMNKP4wfIhP0A"
+        weight = -90
+        pre = "youtube"
+    [[menu.main]]
+        identifier = "pssouth"
+        name = "PowerShell Southampton"
+        url = "https://pssouth.co.uk"
+        weight = -80
+        pre = "prompt"
     [[menu.main]]
         identifier = "archives"
         name = "Archives"
         url = "archives"
-        weight = -70
+        weight = 0
         pre = "archives"

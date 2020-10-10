@@ -1,6 +1,5 @@
 ---
-title: "Deploying Hugo websites in Azure for pennies or for free on GitHub pages"
-description: "Learn how to deploy your Hugo websites to a Azure Static Web App, Azure Blob storage container or GitHub pages"
+title: "Deploying Hugo websites in Azure for pennies or free on GitHub pages"
 date: 2020-10-05T21:04:10+01:00
 draft: true
 image: images/cover.jpg
@@ -12,7 +11,13 @@ image: images/cover.jpg
 - [Azure Blob storage](#azure-blob-storage)
 - [GitHub pages](#github-pages)
 
-I will be touching on a little about Hugo and why I like it. I am also going to show you three ways to deploy your Hugo websites: with Azure Static Web Apps (preview), Azure Blob storage and GitHub pages.
+I recently migrated my WordPress blogging platform to generating static content with Hugo. I no longer pay for hosting. I exclusively use GitHub pages. I am now blogging at no extra cost other than domain renewal!
+
+In the process not only did I learn about Hugo, but I also looked at three ways to deploy / host my Hugo-made website.
+
+In this post I want to share with you what Hugo is, why I like it and those three ways that I learned on how to deploy a Hugo website - with Azure Static Web Apps (preview), Azure Blob storage and GitHub pages.
+
+For Azure Static Web Apps and Blob storage, I will be using Cloudflare. I am also assuming you will be using your own domain name. It is not a big deal if you do not want to, just ignore details focused on defining custom domains and creating CNAME records.
 
 ## What is this Hugo thing?
 
@@ -87,11 +92,15 @@ Now your Hugo generated static website is deployed in Azure using Static Web App
 
 Moving on to hosting your Hugo website on Azure Blob storage instead.
 
-There's no fancy automation here. Azure Blob storage does not integrate with your GitHub repository so it does not create a neat CI/CD pipeline for you. It also does not automatically create the static website. There is also no bundled Azure Functions resource so you can not roll your own API. Also, if you want the same CI/CD experience as with Azure Static Web Apps, you must roll your own workflow. But that is OK! Because I will share with you mine!
+Now... Azure Blob storage does not do everything Azure Static Web Apps does. There is a reasonable amount of configuration to do yourself. For example, the Blob storage account is not automatically configured to be a static website. There is also no bundled Azure Functions resource so you can not roll your own API. If you want the same CI/CD experience as with Azure Static Web Apps, you must roll your own workflow with GitHub Actions (or similar). But that is OK! Because I will share with you my GitHub Actions workflow!
 
-Why bother using it then if it is inferior? I guess while Static Web Apps are in preview, even though Microsoft will give you 30 days notice, they could start charging you an unpredictable rate to use it. Whereas Blob storage is here now, and its pricing is predictable. Maybe you also have your own reasons to prefer Blob storage.
+Why bother using it then? I guess while Static Web Apps are in preview, even though Microsoft will give you 30 days notice, they could start charging you an unpredictable rate to use it. Whereas Blob storage is here now, its pricing model is known and it is very cost effective. 
 
-As previously mentioned, at the time of writing this it is £0.0144 per GB in UK South for Blob storage. Although you must be careful, because while the first 5GB is free, what if your website starts receiving a lot of malicious attention? For that reason, I put Cloudflare in front of mine and I will show you how too.
+As previously mentioned, at the time of writing this it is £0.0144 per GB in UK South for Blob storage and the first 5GB of outbound bandwidth is free from this zone. 
+
+Maybe you also have your own reasons to prefer Blob storage.
+
+While following the below, you will see I use Cloudflare in front of my Blob storage static website. Cloudflare is my DNS service for most of my domains, offers free and easy TLS certificates as well as some protection.
 
 1. Log in to the [Azure portal](https://portal.azure.com)
 2. Create a new Azure Storage account
@@ -100,7 +109,7 @@ As previously mentioned, at the time of writing this it is £0.0144 per GB in UK
 ![Storage account creation in Azure Portal](images/staticwebapp-09.jpg) ![Storage account creation in Azure Portal](images/staticwebapp-10.jpg)
 
 4. Within the `Static website` blade, enable the storage account to be a static website. Also define your index and error documents to be`index.html` and `404.html`.
-5. Within the `Containers` blade, select the `$web` container and from up top, change its access level via the `Change access level` menu item. Set its access policy to `Container`
+5. Within the `Containers` blade, select the `$web` container and from the top menu change its access level via the `Change access level` menu item. Set its access policy to `Container`.
 6. Within the `Custom domain` blade, enter your custom domain and copy the domain which ends with `z33.web.core.windows.net`. This will be used used to configure your CNAME record. Before clicking Save for your new custom domain, you will need to create a CNAME record with your DNS provider.
 7. Head over to [Cloudflare](https://cloudfoare.com) and configure a CNAME record pointing to the `z33.web.core.windows.net` domain gathered from the last step. 
 8. Wait a little bit (a couple of minutes?), then back in the `Custom domain` blade of the Azure portal, click Save and the domain should validate OK. If it doesn't, wait a little longer.
@@ -110,7 +119,7 @@ As previously mentioned, at the time of writing this it is £0.0144 per GB in UK
 
 At this point, all there is left to do is to upload some content to your new Blob storage `$web` container. 
 
-As a mess-around, create an `index.html` locally with some simple HTML in it which we'll use for testing shortly. Install [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and sign in with your Azure AD account with the subscription that holds your new storage account.
+As a mess-around, create a file named `index.html` locally with some simple HTML in it which we'll use for testing shortly. Install [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and sign in with your Azure AD account with the subscription that holds your new storage account.
 
 ```html
 <html>
@@ -126,12 +135,13 @@ Upload `index.html` to the `$web` container and check it out! It's worth pointin
 
 What we really want to do is to get the similar CI/CD pipeline going on like we had with Static Web Apps.
 
-1. Within the `Shared access signature` blade of the storage account, generate a SAS connection string with the same permissions as below screenshot. Set the start/expiration date to suit your needs. Make note of the `Connection string` at the bottom.
-2. From the Settings of your GitHub repository, create a secret named `AZURE_STORAGE_BLOB_SAS_CONNECTIONSTRING`.
+9. Within the `Shared access signature` blade of the storage account, generate a SAS connection string with the same permissions as below screenshot. Set the start/expiration date to suit your needs. 
+10. Make note of the `Connection string` at the bottom.
+11. From the Settings of your GitHub repository, create a secret named `AZURE_STORAGE_BLOB_SAS_CONNECTIONSTRING`.
 
 ![Create SAS and connection string](images/staticwebapp-18.jpg) ![Create secret in your GitHub repository](images/staticwebapp-19.jpg)
 
-3. Create a file in your repository named `azure-blob-storage.yml` (or whatever you want, it really doesn't matter, must be `.yml` though) in `.github\workflows` directory (that does matter, it must live in there). Use the below to populate to populate its contents.
+12. Create a file in your repository named `azure-blob-storage.yml` (or whatever you want, it really doesn't matter, must be `.yml` though) in `.github\workflows` directory (that does matter, it must live in there). Use the below to populate to populate its contents.
 
 ```yaml
 name: Azure Storage Blob Container CI/CD
@@ -167,14 +177,62 @@ jobs:
           sync: true
 ```
 
-4. Commit and push to your master branch.
+13. Commit and push to your master branch.
 
-Watch the status of the GitHub action at `https://github.com/YOUR_USERNAME/YOUR_REPO/actions`. If it ran successfully without any errors, you will see your Hugo website live on your domain using a Cloudflare certificate! 
+Watch the status of the GitHub action at `https://github.com/YOUR_USERNAME/YOUR_REPO/actions`. If it ran successfully without any errors, you will see your Hugo website live at your domain!
 
-If you want to make any more changes to your website, that's OK! Every time you commit to master the workflow will be triggered and it will upload everything that gets created in the `/public` directory within the runner to your `$web` container.
-
-Some people like to change the event used to trigger their workflows, e.g. must include a particular message in the commit, or it must be a closed pull request.
+If you want to make any more changes to your website, that's OK! With the above workflow in your repo, every time you commit to master, the workflow will be triggered and it will upload everything that gets created in the `/public` directory within the runner to your `$web` container.
 
 ## GitHub pages
 
-- 500MB limit on GitHub repositories
+Last but definitely not least is [GitHub pages](https://pages.github.com/). I think this is probably my favourite because it is [the simplest to create](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-github-pages-site) and absolutely free. 
+
+[Hugo also has some excellent docs](https://gohugo.io/hosting-and-deployment/hosting-on-github/) on deploying to GitHub pages. They suggest a reasonable idea where we have two repositories. One contains your Hugo sources, and another - which is added as a Git submodule - holds our Hugo generated HTML content. The former would be a repository named whatever you want, for example `<username>.github.io-hugo`, whereas the latter would be named `<username>.github.io`.
+
+1. Create your repository named `<username>.github.io`
+2. Go to the Settings of your repository
+3. Enable GitHub pages by choosing your branch (`master`) and folder (`/`). Optionally enter your custom domain. If you do enter a custom domain, follow my prior instructions to [configures a CNAME record](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site) that points to `<username>.github.io`.
+4. Check the box to `Enforce HTTPS` however note that this really does take ~24 hours to generate the certificate.
+
+![GitHub repository settings](images/staticwebapp-20.jpg) ![Configure GitHub repository for GitHub pages](images/staticwebapp-21.jpg)
+
+5. Create another repository that will contain our Hugo sources, named something like `<username>.github.io-hugo`
+6. Clone your `<username>.github.io-hugo` repository to your computer and copy all of your Hugo content in to it, excluding the `public` directory
+
+```
+PS C:\git> git clone https://github.com/USERNAME/USERNAME.github.io-hugo.git
+```
+
+7. Change directory in to cloned repository and add our `<username>.github.io` repository as a submodule in to the `public` directory
+
+```
+PS C:\git> cd USERNAME.github.io-hugo
+PS C:\git\USERNAME.github.io-hugo> git submodule add -b master https://github.com/USERNAME/USERNAME.github.io.git public
+```
+
+8.  Invoke `hugo` to generate the static website in the `public` directory, create a null file `.nojekyll` in the `public` directory
+
+```
+PS C:\git\USERNAME.github.io-hugo> hugo
+PS C:\git\USERNAME.github.io-hugo> $null>>public\.nojekyll
+```
+
+9. At this point, before we commit and push up to GitHub, issue `hugo server` within the `C:\git\USERNAME.github.io-hugo` directory and check out how things look locally by browsing to [http://localhost:1313](http://localhost:1313).
+10.  If all looks good, commit and push while within both directories `C:\git\USERNAME.github.io-hugo` and `C:\git\USERNAME.github.io-hugo\public`.
+
+
+
+
+
+
+Essentially, you enable a repository to become a website, tell it where to serve up content from (a particular branch/folder in your repository, aka "publishing source").
+
+Your repository name must be a particular name, e.g. for users create a repository named `<username>.github.io` and for organisations name it `<organisation>.github.io`.
+
+After that, place some content in your defined publishing source, wait a short while and check out your website!
+
+It is also absolutely possible [to use your own domain](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/configuring-a-custom-domain-for-your-github-pages-site) and [enforce HTTPS](https://help.github.com/articles/securing-your-github-pages-site-with-https/)!
+
+You will notice I have not gone in to as much detail here about getting started with GitHub pages like I did with Static Web Apps or Blob storage static websites. I feel the GitHub docs are excellent already on this topic.
+
+# Create `static/CNAME` file https://gohugo.io/hosting-and-deployment/hosting-on-github/
