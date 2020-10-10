@@ -1,7 +1,7 @@
 ---
 title: "Deploying Hugo websites in Azure for pennies or free on GitHub pages"
 date: 2020-10-05T21:04:10+01:00
-draft: true
+draft: false
 image: images/cover.jpg
 ---
 
@@ -180,6 +180,8 @@ If you want to make any more changes to your website, that's OK! With the above 
 
 Last but definitely not least is [GitHub pages](https://pages.github.com/). I think this is probably my favourite because it is [the simplest to create](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-github-pages-site) and absolutely free. 
 
+It is worth pointing out some [usage limits associated with GitHub pages}(https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/about-github-pages#usage-limits): soft bandwidth limit of 100GB p/month and repositories should ideally not be larger than 1GB.
+
 [Hugo also has some excellent docs](https://gohugo.io/hosting-and-deployment/hosting-on-github/) on deploying to GitHub pages. They suggest a reasonable idea where we have two repositories for our static website, instead fo one. One contains your Hugo sources, and another - which is added as a Git submodule - holds our Hugo generated HTML content. The former would be a repository named whatever you want, for example `<username>.github.io-hugo`, whereas the latter would be named `<username>.github.io`.
 
 1. Create your repository named `<username>.github.io`
@@ -187,7 +189,7 @@ Last but definitely not least is [GitHub pages](https://pages.github.com/). I th
 3. Enable GitHub pages by choosing your branch (`master`) and folder (`/`). 
 4. Optionally enter your custom domain
 
-If you do enter a custom domain:, follow my prior instructions to [configures a CNAME record](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site) that points to `<username>.github.io`. Also create a file `static/CNAME` in your Hugo sources containing only your domain, [read more here](https://gohugo.io/hosting-and-deployment/hosting-on-github/).
+If you do enter a custom domain, check out this documentation on [Managing a customer domain for your GitHub pages site](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site).
 
 1. Check the box to `Enforce HTTPS` however note that this really does take ~24 hours to generate the certificate.
 
