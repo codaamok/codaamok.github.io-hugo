@@ -1,5 +1,5 @@
 ---
-title: "Deploying Hugo websites in Azure for pennies or free on GitHub pages"
+title: "Deploying Hugo Websites in Azure for Pennies or Free on GitHub Pages"
 date: 2020-10-05T21:04:10+01:00
 draft: false
 image: images/cover.jpg
