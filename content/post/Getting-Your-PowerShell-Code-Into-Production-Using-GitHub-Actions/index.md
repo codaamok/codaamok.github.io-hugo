@@ -1,7 +1,7 @@
 ---
-title: "Getting Your Powershell Code Into Production Using Github  Actions"
+title: "Getting Your Powershell Code Into Production Using Github Actions"
 date: 2020-10-17T00:00:00+01:00
-draft: true
+draft: false
 image: images/Getting-Your-PowerShell-Code-Into-Production-Using-GitHub-Actions-00.jpg
 categories:
     - Presentations
