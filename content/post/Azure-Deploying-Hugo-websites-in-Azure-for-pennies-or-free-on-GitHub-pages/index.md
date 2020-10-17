@@ -8,11 +8,11 @@ categories:
   - Other
 ---
 
-I recently migrated my WordPress blogging platform to generating static content with Hugo. I no longer pay for hosting. I exclusively use GitHub pages. I am now blogging at no extra cost other than domain renewal!
+I recently migrated my WordPress blogging platform to generating static content with Hugo. I no longer pay for hosting. I exclusively use GitHub Pages. I am now blogging at no extra cost other than domain renewal!
 
 In the process not only did I learn about Hugo, but I also looked at three ways to deploy / host my Hugo-made website.
 
-In this post I want to share with you what Hugo is, why I like it and those three ways that I learned on how to deploy a Hugo website - with Azure Static Web Apps (preview), Azure Blob storage and GitHub pages.
+In this post I want to share with you what Hugo is, why I like it and those three ways that I learned on how to deploy a Hugo website - with Azure Static Web Apps (preview), Azure Blob storage and GitHub Pages.
 
 For Azure Static Web Apps and Blob storage, I will be using Cloudflare. I am also assuming you will be using your own domain name. It is not a big deal if you do not want to, just ignore details focused on defining custom domains and creating CNAME records.
 
@@ -20,7 +20,7 @@ For Azure Static Web Apps and Blob storage, I will be using Cloudflare. I am als
 - [Prerequisites](#prerequisites)
 - [Azure Static Web Apps](#azure-static-web-apps)
 - [Azure Blob storage](#azure-blob-storage)
-- [GitHub pages](#github-pages)
+- [GitHub Pages](#github-pages)
 - [That is a wrap](#that-is-a-wrap)
 
 ## What is this Hugo thing?
@@ -37,9 +37,9 @@ Instead of writing your pages and blog posts in HTML files or in a feature-rich 
 
 When it comes to styling, themes are mostly plug and play, too. Fancy a new theme? No problem. [Download one](https://themes.gohugo.io/), drop it in the `/themes` directory amd update `config.toml` a little.
 
-With static websites, no runtime is needed to run your website. Not only does this open up your hosting opportunities, performance is also another great benefit. You do not need a hosting package that sit on nginx or Apache, running PHP or whatever. For example, you can host on [Azure Blob storage](https://azure.microsoft.com/en-gb/services/storage/Blobs/) or [GitHub pages](https://pages.github.com/).
+With static websites, no runtime is needed to run your website. Not only does this open up your hosting opportunities, performance is also another great benefit. You do not need a hosting package that sit on nginx or Apache, running PHP or whatever. For example, you can host on [Azure Blob storage](https://azure.microsoft.com/en-gb/services/storage/Blobs/) or [GitHub Pages](https://pages.github.com/).
 
-GitHub pages is free. It also lets you use your own domain and offers free SSL certificates via LetsEncrypt. Azure Blob Storage isn't quite free but it costs pennies. It is £0.0144 per GB (in UK South) of storage and the first 5GB of bandwidth from this zone is free. You can do this on many more platforms too, such as Amazon S3, Netlify, Heroku, GitLab Pages, Google Cloud Storage and more.
+GitHub Pages is free. It also lets you use your own domain and offers free SSL certificates via LetsEncrypt. Azure Blob Storage isn't quite free but it costs pennies. It is £0.0144 per GB (in UK South) of storage and the first 5GB of bandwidth from this zone is free. You can do this on many more platforms too, such as Amazon S3, Netlify, Heroku, GitLab Pages, Google Cloud Storage and more.
 
 I am all-for ditching WordPress. Over the last few years I have grown more comfortable with Git and working on Azure and GitHub. If you relate to that or are enticed by any of the benefits, I highly recommend you at least give it a go! I would be more than happy to help, too, just get hold of me.
 
@@ -179,24 +179,24 @@ Watch the status of the GitHub action at `https://github.com/YOUR_USERNAME/YOUR_
 
 If you want to make any more changes to your website, that's OK! With the above workflow in your repo, every time you commit to master, the workflow will be triggered and it will upload everything that gets created in the `public` directory within the runner to your `$web` container.
 
-## GitHub pages
+## GitHub Pages
 
-Last but definitely not least is [GitHub pages](https://pages.github.com/). I think this is probably my favourite because it is [the simplest to create](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-github-pages-site) and absolutely free. 
+Last but definitely not least is [GitHub Pages](https://pages.github.com/). I think this is probably my favourite because it is [the simplest to create](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-github-pages-site) and absolutely free. 
 
-It is worth pointing out some [usage limits associated with GitHub pages}(https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/about-github-pages#usage-limits): soft bandwidth limit of 100GB p/month and repositories should ideally not be larger than 1GB.
+It is worth pointing out some [usage limits associated with GitHub Pages}(https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/about-github-pages#usage-limits): soft bandwidth limit of 100GB p/month and repositories should ideally not be larger than 1GB.
 
-[Hugo also has some excellent docs](https://gohugo.io/hosting-and-deployment/hosting-on-github/) on deploying to GitHub pages. They suggest a reasonable idea where we have two repositories for our static website, instead fo one. One contains your Hugo sources, and another - which is added as a Git submodule - holds our Hugo generated HTML content. The former would be a repository named whatever you want, for example `<username>.github.io-hugo`, whereas the latter would be named `<username>.github.io`.
+[Hugo also has some excellent docs](https://gohugo.io/hosting-and-deployment/hosting-on-github/) on deploying to GitHub Pages. They suggest a reasonable idea where we have two repositories for our static website, instead fo one. One contains your Hugo sources, and another - which is added as a Git submodule - holds our Hugo generated HTML content. The former would be a repository named whatever you want, for example `<username>.github.io-hugo`, whereas the latter would be named `<username>.github.io`.
 
 1. Create your repository named `<username>.github.io`
 2. Go to the Settings of your repository
-3. Enable GitHub pages by choosing your branch (`master`) and folder (`/`). 
+3. Enable GitHub Pages by choosing your branch (`master`) and folder (`/`). 
 4. Optionally enter your custom domain
 
-If you do enter a custom domain, check out this documentation on [Managing a customer domain for your GitHub pages site](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site).
+If you do enter a custom domain, check out this documentation on [Managing a customer domain for your GitHub Pages site](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site).
 
 1. Check the box to `Enforce HTTPS` however note that this really does take ~24 hours to generate the certificate.
 
-![GitHub repository settings](images/staticwebapp-20.jpg) ![Configure GitHub repository for GitHub pages](images/staticwebapp-21.jpg)
+![GitHub repository settings](images/staticwebapp-20.jpg) ![Configure GitHub repository for GitHub Pages](images/staticwebapp-21.jpg)
 
 5. Create another repository that will contain our Hugo sources, named something like `<username>.github.io-hugo`
 6. Clone your `<username>.github.io-hugo` repository to your computer and copy all of your Hugo content in to it, excluding the `public` directory
