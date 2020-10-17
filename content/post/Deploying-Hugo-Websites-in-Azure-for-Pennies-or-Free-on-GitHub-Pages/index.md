@@ -5,7 +5,7 @@ draft: false
 image: images/cover.jpg
 categories:
   - Azure
-  - Other
+  - CICD
 ---
 
 I recently migrated my WordPress blogging platform to generating static content with Hugo. I no longer pay for hosting. I exclusively use GitHub Pages. I am now blogging at no extra cost other than domain renewal!
@@ -16,12 +16,14 @@ In this post I want to share with you what Hugo is, why I like it and those thre
 
 For Azure Static Web Apps and Blob storage, I will be using Cloudflare. I am also assuming you will be using your own domain name. It is not a big deal if you do not want to, just ignore details focused on defining custom domains and creating CNAME records.
 
+There will also be some assumptions that you are somewhat familiar with using GitHub Actions. If you are looking for an introduction to using GitHub Actions, check out my [WinAdmins virtual user group event session](/p/getting-your-powershell-code-into-production-using-github-actions/).
+
 - [What is this Hugo thing?](#what-is-this-hugo-thing)
 - [Prerequisites](#prerequisites)
 - [Azure Static Web Apps](#azure-static-web-apps)
 - [Azure Blob storage](#azure-blob-storage)
 - [GitHub Pages](#github-pages)
-- [That is a wrap](#that-is-a-wrap)
+- [Closing comments](#closing-comments)
 
 ## What is this Hugo thing?
 
@@ -183,47 +185,82 @@ If you want to make any more changes to your website, that's OK! With the above 
 
 Last but definitely not least is [GitHub Pages](https://pages.github.com/). I think this is probably my favourite because it is [the simplest to create](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-github-pages-site) and absolutely free. 
 
-It is worth pointing out some [usage limits associated with GitHub Pages}(https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/about-github-pages#usage-limits): soft bandwidth limit of 100GB p/month and repositories should ideally not be larger than 1GB.
+It is worth pointing out some [usage limits associated with GitHub Pages](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/about-github-pages#usage-limits): soft bandwidth limit of 100GB p/month and repositories should ideally not be larger than 1GB.
 
-[Hugo also has some excellent docs](https://gohugo.io/hosting-and-deployment/hosting-on-github/) on deploying to GitHub Pages. They suggest a reasonable idea where we have two repositories for our static website, instead fo one. One contains your Hugo sources, and another - which is added as a Git submodule - holds our Hugo generated HTML content. The former would be a repository named whatever you want, for example `<username>.github.io-hugo`, whereas the latter would be named `<username>.github.io`.
+[Hugo also has some excellent docs](https://gohugo.io/hosting-and-deployment/hosting-on-github/) on deploying to GitHub Pages. They suggest a reasonable idea where we have two repositories for our static website, instead of one. One contains your Hugo sources, and another - which is added as a Git submodule - holds our Hugo generated HTML content. The former would be a repository named whatever you want, for example `<username>.github.io-hugo`, whereas the latter would be named `<username>.github.io`.
+
+Instead of that, we are going to keep focused on using GitHub Actions. This will enable to create a pipeline for Hugo to grab content from repository, and use it to publish to another. In other words, we will still have two repositories however we will not create a submodule for the `public` directory.
 
 1. Create your repository named `<username>.github.io`
 2. Go to the Settings of your repository
-3. Enable GitHub Pages by choosing your branch (`master`) and folder (`/`). 
-4. Optionally enter your custom domain
+3. Enable GitHub Pages by choosing your branch (`master`) and folder (`/`)
+4. Within the same section from the previous step, optionally enter your custom domain
 
 If you do enter a custom domain, check out this documentation on [Managing a customer domain for your GitHub Pages site](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site).
 
-1. Check the box to `Enforce HTTPS` however note that this really does take ~24 hours to generate the certificate.
+5. Check the box to `Enforce HTTPS` however note that this really does take ~24 hours to generate the certificate.
 
 ![GitHub repository settings](images/staticwebapp-20.jpg) ![Configure GitHub repository for GitHub Pages](images/staticwebapp-21.jpg)
 
-5. Create another repository that will contain our Hugo sources, named something like `<username>.github.io-hugo`
-6. Clone your `<username>.github.io-hugo` repository to your computer and copy all of your Hugo content in to it, excluding the `public` directory
+6. Go to your [GitHub account's developer settings](https://github.com/settings/tokens) and [create a Personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token). Make note of the generated token for use in a couple of steps.
+7. Create another repository that will contain our Hugo sources, named something like `<username>.github.io-hugo`
+8. Go to the Settings of your newly created repository (with -hugo in the name) and [create a new secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) named something like `<username>githubiohugo`. Its value will be the personal access token we created moments ago.
+9. Clone your `<username>.github.io-hugo` repository to your computer and copy all of your Hugo content in to it, excluding the `public` directory
 
 ```
 PS C:\git> git clone https://github.com/USERNAME/USERNAME.github.io-hugo.git
 ```
 
-7. Change directory in to cloned repository and add our `<username>.github.io` repository as a submodule in to the `public` directory
+10. Create `publish.yml` in `.github/workflows` and put the below content inside it, adjusting the necessary values that read `<CHANGEME>`:
 
+```yaml
+name: Publish site
+
+on: 
+  push:
+    branch:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Update theme
+        run: git submodule update --init --recursive # Optional if you have the theme added as submodule, you can pull it and use the most updated version
+
+      - name: Setup hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: "0.75.1"
+          extended: true
+
+      - name: Build
+        run: hugo
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.<CHANGEME> }} # The name of the secret you created in step 8
+          external_repository: <CHANGEME> # The name of the GitHub Pages repository, e.g. <username>/<username>.github.io
+          publish_dir: ./public
+          user_name: <CHANGEME> # The git username used for publishing commits to external_repository
+          user_email: <CHANGEME> # The git email address used for publishing commits to external_repository
+          publish_branch: master
+          cname: <CHANGEME> # If you configured your own domain, you may want to populate this with it, e.g. mine is adamcook.io.
 ```
-PS C:\git> cd USERNAME.github.io-hugo
-PS C:\git\USERNAME.github.io-hugo> git submodule add -b master https://github.com/USERNAME/USERNAME.github.io.git public
-```
 
-8.  Invoke `hugo` to generate the static website in the `public` directory, create a null file `.nojekyll` in the `public` directory
+[Thank you to Ruddra for inspiration of this YAML!](https://ruddra.com/hugo-deploy-static-page-using-github-actions/)
 
-```
-PS C:\git\USERNAME.github.io-hugo> hugo
-PS C:\git\USERNAME.github.io-hugo> $null>>public\.nojekyll
-```
+11. At this point, before we commit and push up to GitHub, issue `hugo server` within the `C:\git\USERNAME.github.io-hugo` directory and check out how things look locally by browsing to [http://localhost:1313](http://localhost:1313).
+12.   If all looks good, commit and push. The GitHub Actions workflow will take care of the rest of:
+      1.    Invoking Hugo to generate content in `public` within the runner
+      2.    Publish said content to our GitHub Pages `<username>.github.io` repository
 
-9. At this point, before we commit and push up to GitHub, issue `hugo server` within the `C:\git\USERNAME.github.io-hugo` directory and check out how things look locally by browsing to [http://localhost:1313](http://localhost:1313).
-10.  If all looks good, commit and push while within both directories `C:\git\USERNAME.github.io-hugo` and `C:\git\USERNAME.github.io-hugo\public`.
-
-## That is a wrap
+## Closing comments
 
 I hope you found this helpful!
 
- If you have any questions or feedback, drop a comment below, ping me on Twitter or find me in the [WinAdmins Discord](https://winadmins.io) (my handle is @acc)!
+If you have any questions or feedback, drop a comment below, ping me on Twitter or find me in the [WinAdmins Discord](https://winadmins.io) (my handle is @acc)!

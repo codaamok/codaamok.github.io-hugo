@@ -1,5 +1,6 @@
 ---
 title: "PowerShell"
-description: "Content where PowerShell is the main focus"
+description: "Content where PowerShell is relevant"
 slug: "powershell"
+image: "image.png"
 ---

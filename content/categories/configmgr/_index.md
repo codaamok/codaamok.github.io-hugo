@@ -1,5 +1,6 @@
 ---
 title: "ConfigMgr"
-description: "Content where ConfigMgr is the main focus"
+description: "Content where ConfigMgr is relevant"
 slug: "ConfigMgr"
+image: "image.png"
 ---
