@@ -4,6 +4,7 @@ date: 2019-07-07T00:00:00+01:00
 draft: false
 categories:
     - ConfigMgr
+    - PowerShell
 ---
 
 I recently wrote a PowerShell script that reports on what folders are used or unused by System Center Configuration Manager. 

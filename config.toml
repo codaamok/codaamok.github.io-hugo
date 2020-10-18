@@ -77,15 +77,21 @@ enableEmoji = true
         weight = -91
         pre = "linkedin"
     [[menu.main]]
-        identifier = "youtube"
-        name = "YouTube"
-        url = "https://www.youtube.com/channel/UCjv4o4ToaauMNKP4wfIhP0A"
+        identifier = "acclaims"
+        name = "My Acclaims"
+        url = "https://www.youracclaim.com/users/adam-cook.e3a67a21/badges"
         weight = -90
-        pre = "youtube"
+        pre = "award"
+    [[menu.main]]
+        identifier = "sysmansquad"
+        name = "SysManSquad"
+        url = "https://sysmansquad.com/author/codaamok/"
+        weight = -89
+        pre = "notebook"
     [[menu.main]]
         identifier = "pssouth"
         name = "PowerShell Southampton"
         url = "https://pssouth.co.uk"
-        weight = -80
+        weight = -88
         pre = "prompt"
     
