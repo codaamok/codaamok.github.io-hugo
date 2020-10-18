@@ -2,7 +2,7 @@
 title: "ConfigMgr Hardware Inventory Troubleshooting"
 date: 2018-10-28T00:00:00+01:00
 draft: false
-image: images/configmgr-hardware-inventory-troubleshooting-01.jpg
+image: images/cover.jpg
 categories:
     - ConfigMgr
 ---
