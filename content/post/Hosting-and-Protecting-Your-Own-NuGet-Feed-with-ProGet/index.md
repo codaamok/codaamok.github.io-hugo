@@ -65,12 +65,11 @@ This is its web installer and it also installs a separate **Inedo Hub** applicat
 
 2. Launch the installer. Once the downloading and prerequisites scanning is complete:
 
-Choosing **Specify instance...** gave me the "localhost" option. On this VM I have SQL Server installed. If you don't have SQL Server installed, choose "Install Inedo Instance" and it installs SQL Express instead for you.
+Choosing **Specify instance...** gave me the "localhost" option. On this VM I have SQL Server installed. If you don't have SQL Server installed locally and do not want to use a remote database, choose "Install Inedo Instance" and it installs SQL Express instead for you.
 
 Optionally change the **Database Name** if you want to.
 
-I chose **IIS** as the web server, instead of the **Integrated Web Server**. You can later switch from the integrated web server to IIS if you [following this doc](https://docs.inedo.com/docs/various/iis/switching-to-iis). Although it seems 
-they recommend IIS for load-balancing / HA config and also for configuring HTTPS. Later on in this doc we will be configuring the feed to use HTTPS with a web certificate so I recommend you do this too.
+I chose **IIS** as the web server, instead of the **Integrated Web Server**. You can later switch from the integrated web server to IIS if you [following this doc](https://docs.inedo.com/docs/various/iis/switching-to-iis). Although it seems they recommend IIS for load-balancing / HA config and also for configuring HTTPS. Later on in this doc we will be configuring the feed to use HTTPS with a web certificate so I recommend you do this too.
 
 > :warning: Some API endpoints for ProGet use HTTP methods PUT and DELETE. If WebDAV is installed on IIS, it is recommended to disable it. See [Disabling WebDAV in IIS](https://docs.inedo.com/docs/various/iis/disabling-webdav).
 
@@ -266,7 +265,7 @@ That's more or less it. You just pulled a bunch of PowerShell modules from your 
 
 I've mentioned this a few times throughout the post but not discussed it. 
 
-The authentication method when using the `-Credential` parameter used here is [HTTP basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). If you have configured your ProGet instance to be using only HTTP and have protected the feeds using a built-in security identity as discussed in section [Create user for downloading modules or scripts](#create-user-for-downloading-modules-or-scripts), then your credentials will be sent across the wire merely encoded with base64 - (**this is not encryption**).
+The authentication method when using the `-Credential` parameter used here is [HTTP basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). If you have configured your ProGet instance to be using only HTTP and have protected the feeds using a built-in security identity as discussed in section [Create user for downloading modules or scripts](#create-user-for-downloading-modules-or-scripts), then your credentials will be sent across the wire merely encoded with base64.. **this is not encryption**.
 
 I've demonstrated this below; I configured the package source and repository locally on my machine (repository name is **insecure**). I have registered them using the HTTP endpoint of ProGet, not HTTPS. You can see the credentials in cleartext in packet tracing tools like Wireshark because they're generally helpful and do the decoding for you in the GUI.
 
@@ -292,7 +291,7 @@ Authenticating using Active Directory would for sure be a better and more manage
 
 I also wanted to highlight is that it is possible to store your packages in cloud storage using ProGet's [Cloud Package Stores](https://docs.inedo.com/docs/proget/advanced/cloud-storage) and extension for Azure. The would certainly reduce your on-premises storage requirements and allow greater room scalability and flexibility by using an Azure Storage Account.
 
-I like to use a featured image in my blog which is relevant at the time in my life while I was writing the post. For this post I started around halloween and got both lazy and busy. Here I am, 12 days before Christmas using a picture of the pumpkins my fiancé carved on our front porch. It's purely because of COVID-19.. I do nothing with my spare time other than stay home. Nothing to take pictures of!
+I like to use a featured image in my blog which is relevant at the time in my life while I was writing the post. For this post I started around halloween and got both lazy and busy. Here I am, 12 days before Christmas using a picture of the pumpkins my fiancé and I carved on our front porch. It's purely because of COVID-19.. I do nothing with my spare time other than stay home. Nothing to take pictures of!
 
 I hope you found this information useful. If there's any room for improvements, let me know in the comments below. If it helped you in any way, still let me know - that helps me keep going. Check out the additional resources below for further reading.
 
