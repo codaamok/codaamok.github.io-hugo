@@ -17,7 +17,7 @@ Here is some material I used to help me learn streaming: a bunch of posts by [Ch
 
 The first event is this Wednesday and I got seriously carried away this weekend with styling some "starting soon" or "be right back" animations. Below is what I've ended up with and I'll quickly walkthrough how to use it if you wanted to do something similar.
 
-{{< youtube VAtMaMHLFW8 >}}
+{{< youtube zubibdBBTVU >}}
 
 As you can see in both scenes there is only 1 single browse source. This immediately makes my OBS setup super simple and easily to recreate if I ever need to.
 
@@ -42,4 +42,4 @@ This workflow makes life very easy moving forward: no need to fiddle with OBS so
 
 Here's a quick demo of using the `New-PSSouthamptonVirtualSession.ps1` and how easily it changes `index.php`:
 
-{{< youtube 1OhdfvRGNyo >}}
+{{< youtube fuGn8oPYBzE >}}
