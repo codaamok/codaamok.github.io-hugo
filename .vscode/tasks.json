@@ -7,7 +7,7 @@
             "label": "Hugo Server",
             "type": "process",
             "command": "hugo",
-            "args": ["server", "-D", "-F"],
+            "args": ["server", "-D", "-F", "--disableFastRender"],
             "isBackground": true,
             "presentation": {
                 "echo": true,
