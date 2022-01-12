@@ -58,7 +58,7 @@ $ApiKey = "ba6c52ed-flk5-4e84-9fc7-9c7e34825da0" | ConvertTo-SecureString -AsPla
 Using the newly created SecureString API key for our Shlink instance, let's query all of our short codes:
 
 ```powershell
-Get-ShlinkUrl -ShlinkServer "https://myshlinkserver.com" -ShlinkApiKey $Key
+Get-ShlinkUrl -ShlinkServer "https://myshlinkserver.com" -ShlinkApiKey $ApiKey
 ```
 
 The great thing about PSShlink is that the Shlink server name and API key are held in memory for as long as the PowerShell lives. They're not accessible as variables to use outside of the ["module's scope"](https://mikefrobbins.com/2017/06/08/what-is-this-module-scope-in-powershell-that-you-speak-of/#:~:text=%E2%80%9CThe%20privacy%20of%20a%20module,do%20have%20their%20own%20scope.%E2%80%9D) though. 
