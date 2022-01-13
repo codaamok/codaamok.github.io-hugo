@@ -1,7 +1,7 @@
 ---
 title: "Remote Desktop Gateway Woes and NPS Logging"
 date: 2022-01-13T12:57:21Z
-draft: true
+draft: false
 image: images/cover.jpg
 categories:
     - Other
