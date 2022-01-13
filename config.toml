@@ -31,7 +31,7 @@ enableEmoji = true
     [params.sidebar]
         emoji = "🙃"
         avatar = "img/avatar.png"
-        subtitle = "Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Misses #Linux."
+        subtitle = "<span style='font-size: 1.2rem;'>— <a href='https://patchmypc.com'>Patch My PC</a> Support Engineer</span><br/><br/>Passionate about helping people. #PowerShell, #ConfigMgr and #Azure. Misses #Linux."
 
     [params.widgets]
         enabled = ['archives']
