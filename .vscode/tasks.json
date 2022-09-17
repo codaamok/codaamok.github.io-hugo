@@ -6,7 +6,7 @@
         {
             "label": "Hugo Server",
             "type": "process",
-            "command": "hugo",
+            "command": "/opt/homebrew/bin/hugo",
             "args": ["server", "-D", "-F", "--disableFastRender"],
             "isBackground": true,
             "presentation": {

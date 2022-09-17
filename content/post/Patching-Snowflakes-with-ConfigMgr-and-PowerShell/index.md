@@ -1,6 +1,6 @@
 ---
 title: "Patching Snowflakes With ConfigMgr and PowerShell"
-date: 2022-09-14T10:22:56+01:00
+date: 2022-09-17T10:22:56+01:00
 draft: true
 image: images/cover.jpg
 categories:
@@ -8,9 +8,11 @@ categories:
     - ConfigMgr
 ---
 
-Do you have servers in your environment that require special or manual patching?
+- Do you have servers in your environment that require special or manual patching?
+- Do you have non-redundant application servers that must have a co-ordinated patching routine? Wish you used ConfigMgr for these but haven't figured out a way?
+- Do you have spaghetti code today that attempts to orchestrate complicated patching cycles and want a cleaner solution? 
 
-By "special patching", I mean the customer or application owners are terrified of the word "patching" and demand it be performed manually on a handful of finicky application servers out of fear of downtime.
+By "special patching", I mean the customer or application owners are terrified of the word "patching" and demand it be performed manually on a handful of finicky application servers out of fear of downtime. _(yeah, because hitting 'check for updates' manually reduces risk_ :unamused: _)_
 
 This leaves you feeling frustrated in having to perform tedious manual labour. Login, point, click, sit, wait etc.. You're also annoyed the business has invested in a behemoth like ConfigMgr, and aren't using it to its full potential just for these handful of special "snowflake" servers.
 
@@ -18,33 +20,50 @@ This is where I tell you I wrote a PowerShell module that automates this! Which 
 
 ## PSCMSnowflakePatching
 
-[PSCMSnowflakePatching](https://github.com/codaamok/PSCMSnowflakePatching) is a PowerShell module which contains a few functions but the primary interest is in [`Invoke-CMSnowflakePatching`](https://github.com/codaamok/PSCMSnowflakePatching/blob/main/docs/Invoke-CMSoftwareUpdateInstall.md). In this post I want to show you why I think this function will help you streamline your manual labour for these snowflake servers, without needing to sacrifice the use of ConfigMgr.
+[PSCMSnowflakePatching](https://github.com/codaamok/PSCMSnowflakePatching) is a PowerShell module which contains a few functions but the primary interest is in [`Invoke-CMSnowflakePatching`](https://github.com/codaamok/PSCMSnowflakePatching/blob/main/docs/Invoke-CMSoftwareUpdateInstall.md). 
+
+In this post I want to show you why I think this function will help you patch these snowflake systems without needing to sacrifice the use of ConfigMgr. It can streamline your manual labour, or your existing automation process, or hopefully inspire you to automate a complex patching routine with it.
 
 Using `Invoke-CMSnowflakePatching`, you can either:
 
 - a) give it one or more hostnames via the `-ComputerName` parameter
-- b) pass it a ConfigMgr device collection ID via the `-CollectionId` parameter
+- b) give it a ConfigMgr device collection ID via the `-CollectionId` parameter
 - c) use the `-ChooseCollection` parameter and select a device collection from your environment
 
-For each host, it will remotely start the software update installation for all updates in the client's Software Center (even updates configured to be hidden in the User Experience of its deployment settings). This is nice for several reasons:
+For each host, it will remotely start the software update installation for all updates deploy to it. By default it doesn't reboot or make any retry attempts, but there parameters for this if you need it.
 
-- you do not need to RDP to each host to start the update install, watch it, and manually reboot if needed
-  - monitor the progress in real time in the PowerShell window while the function is running
-  - use the `-AllowReboot` switch to let the function reboot the servers if any updates are in a pending reboot state
-- for all the hosts given, it will process them all in parallel
-  - need to stagger servers? run the script multiple times with a different list / collection of servers
-- get a clear summary of all updates installed for each server when it's finished
-- if any failures occur but you think a few retries should do the trick (oof), use the `-Retry` parameter and specify how many times you would like retry patching if any installation failures occur
+- `-AllowReboot` switch will reboot the system(s) if any update returned an exit code indicating a reboot is required
+- `-Retry` parameter will let you indicate the maximum number of retries you would like the function to install updates if there was a failure in the previous attempt
 
-To take this to the next level, if you use the either the `-ComputerName` or `-CollectionId` parameters, an output object is returned at the end of the process with the result of patching for each host. This is great because if you want to orchestrate a complex patching routine with tools such as System Center Orchestrator or Azure Automation, you can absolutely do this with the feedback from the function.
+All hosts are processed in parallel, and you will get a live progress update from each host as it has finished patching with a break down of what updates were installed, success or failure.
 
-For example, if I ran the following command:
+If you use the either the `-ComputerName` or `-CollectionId` parameters, an output object is returned at the end with the result of patching for each host. This is great because if you want to orchestrate a complex patching routine with tools such as System Center Orchestrator or Azure Automation, you can absolutely do this with the feedback from the function.
+
+![Live progress written to console](images/1-1.png) 
+
+In the above screenshot, you can see we're calling `Invoke-CMSnowflakePatching` and giving it a ConfigMgr device collection ID. We're capturing the output of the command by assigning it to the `$result` variable. 
+
+It's worth calling out the times in the first two columns: the first column is the time when that line was written, and the second column is the elapsed time since the start of execution.
+
+Beyond the first few lines revolving around startup, you can see essential information as the jobs finish patching each host. We can see the list of updates that successfully installed, and a yellow text warning indicating one of the updates put the system in a pending reboot state.
+
+If you were running this ad-hoc and interactively, I suspect you might find this realtime information helpful. This output likely can't easily be captured by most automation tools as it's just `Write-Host`. However, this is why an output object is returned instead (see below) - this output can be captured and used however you please.
+
+![Output object in the $result variable](images/1-2.png)
+
+Looking at the above screenshot, this is where I believe further automation possibilities might become available for you.
+
+The function returned a summary of the patch jobs for each host as output objects, and we captured this in the `$result` variable from the last screenshot. Here we can see valuable information that might help feed as input to other automation things.
+
+Here is another example, if I ran the following command:
 
 ```ps
-$result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -Retry 3 -AllowReboot
+$result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -AllowReboot -Retry 3
 ```
 
-I will receive the below output object:
+This time we're just targetting the one server, permitting the server to reboot if an update returned a hard/soft pending reboot, and allow a maximum of 3 retries if there were any installation failures.
+
+At the end of the process, you will receive the below output object again in the `$result` variable:
 
 ```
 PS C:\> $result
@@ -63,6 +82,10 @@ RunspaceId      : af37488e-dad9-4d56-b72a-5aa642e589e4
 ```
 
 From the output above you can see the overall result from patching my Veeam server; the list of updates that were installed, whether there is a pending reboot, how many times the server was rebooted during patching, and how many times it retried.
+
+We can see `NumberOfRetries` is 3, and that `7-Zip 22.01 (MSI-x64)` finished in a state of `Error` - it failed to install the update despite 3 attempts.
+
+Here is the full contents of the `Updates` property of the output object in list view:
 
 ```
 PS C:\> $result.Updates | fl
@@ -88,15 +111,13 @@ EvaluationState : InstallComplete
 ErrorCode       : 0
 ```
 
-As you can see, my Veeam server installed all but the `7-Zip 22.01 (MSI-x64)` with success. Its [`EvaluationState`](https://learn.microsoft.com/en-us/mem/configmgr/develop/reference/core/clients/sdk/ccm_softwareupdate-client-wmi-class) tells us it failed and we can also see the `ErrorCode` too. Whereas the others successfully installed.
-
 With this output, you have a lot of opportunities. For example, you could feed this output to other scripts to:
 
 - Send an email as a report with the result
 - Invoke some other custom remedial actions on the server or application it hosts
 - Send the data to a ticketing system using some web API, or raise an alert somewhere
 
-Another benefit here is that you are using what you've paid for - ConfigMgr! With this approach, there will be no need to abandon usual deployment, content delivery, and reporting capabilities, just for these few snowflake servers.
+Another benefit here is that you are using what you've paid for - ConfigMgr! With this approach, there will be no need to abandon usual deployment, content delivery, and reporting capabilities. The function is invoking the install of software updates on the client deployed to it from ConfigMgr.
 
 ## Interatively use PSCMSnowflakePatching with the `-ChooseCollection` Parameter
 
