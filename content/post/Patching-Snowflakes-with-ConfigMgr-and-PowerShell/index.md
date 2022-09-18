@@ -1,7 +1,7 @@
 ---
 title: "Patching Snowflakes With ConfigMgr and PowerShell"
-date: 2022-09-17T10:22:56+01:00
-draft: true
+date: 2022-09-18T10:22:56+01:00
+draft: false
 image: images/cover.jpg
 categories:
     - PowerShell
@@ -132,7 +132,7 @@ The `-ChooseCollection` is the only parameter that you can't use in an automated
 
 This is just demonstrating that you can still use `Invoke-CMSnowflakePatching` to 'manually' patch systems if you wish to, just without the hassle of login, point, click, etc. 
 
-> gif image of `-ChooseCollection` here
+> gif image of `-ChooseCollection`
 
 ## Why a module? Why not just a script?
 
