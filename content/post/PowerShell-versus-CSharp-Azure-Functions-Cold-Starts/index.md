@@ -1,31 +1,12 @@
 ---
 title: "PowerShell vs. CSharp Azure Functions Cold Starts"
 date: 2021-08-07T18:29:18+01:00
-draft: true
+draft: false
 image: images/cover.jpg
 categories:
     - PowerShell
     - Azure
 ---
-
-- Introduction / summarise the post
-  - What are Azure Functions?
-  - What is a "cold start"?
-  - Highlight other posts exists on the topic
-    - I guess I wanted to see if there were any improvements and I had both working code samples available anyway, figured why not
-- Explain the test
-  - Share the Function App code
-  - Share the testing script
-  - Mention it's not a perfect test because I didn't aim for performant and high quality code in either examples
-    - Could perhaps maybe some how get the C# code in to PowerShell?
-  - Share the results
-- Discussion 
-  - Mention the shared Function App code includes commented out sections which demonstrates how to add replyTo email addresses to messages
-  - Explain I've started learning c#, while learning I struggled with the journey a bit:
-    - Completely different style of coding, more OOP
-    - A lot of 'scaffolding' work involved to do trivial things that you can otherwise do in PowerShell with minimal effort
-    - Like many learning experiences I feel frustrated not being able to be productive, more so with C#
-    - My motivation to learn/write more C# drastically changed after seeing performance benefits of this comparison
 
 It has been a while since I've written a post. I've been pretty committed to a new job I started at the start of the year. I need to find more positive outlets and return to doing the things I enjoy in my down-time. I hope to do more tinkering on side projects and giving back to the community.
 
@@ -46,6 +27,7 @@ A quick recap of Azure Functions if you're unsure:
   - [Build serverless APIs with Azure Functions | Azure Friday](https://www.youtube.com/watch?v=499iCgNLDDE)
   - [Introduction to Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-overview)
   - [Intro to Azure Functions - What they are and how to create and deploy them](https://www.youtube.com/watch?v=zIfxkub7CLY)
+  - [PowerShell & Azure Functions - Part 1](https://millerb.co.uk/2019/11/27/Getting-Started-Pwsh-Az-Functions-Part-1.html)
 
 What is a cold start? A cold start is the process of a function starting up and completing the task. The painful fact here is that if your function is left idle for some period of time, e.g. 15 or 20 minutes, the process of the function is stopped until it is called again. The latency the user experiences calling your function again after it has stopped is high. If the user calls your function again within the idle period, before it is stopped, the latency is low because the function is still running.
 
