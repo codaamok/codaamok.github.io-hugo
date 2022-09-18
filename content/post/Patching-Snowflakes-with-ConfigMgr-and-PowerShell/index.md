@@ -152,8 +152,6 @@ For instance, in a task sequence I don't think it's trivial to perform actions i
 <iframe src="https://giphy.com/embed/3cXmze4Y8igXdnkc3U" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen style="display: block; margin: 0 auto;"></iframe>
 {{< /unsafe >}}
 
-
-
 Andrew Porter pinged me asking if I would help making one. He found a few scripts online here and there which collectively sort of did what he wanted but not quite.
 
 These are the scripts which he found:
