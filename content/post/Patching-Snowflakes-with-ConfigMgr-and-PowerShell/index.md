@@ -33,7 +33,7 @@ Using `Invoke-CMSnowflakePatching`, you can either:
 For each host, it will remotely start the software update installation for all updates deployed to it. By default it doesn't reboot or make any retry attempts, but there parameters for this if you need it:
 
 - `-AllowReboot` switch will reboot the system(s) if any update returned an exit code indicating a reboot is required
-- `-Retry` parameter will let you indicate the maximum number of retries you would like the function to install updates if there was a failure in the previous attempt
+- `-Attempts` parameter will let you indicate the maximum number of retries you would like the function to install updates if there was a failure in the previous attempt
 
 All hosts are processed in parallel, and you will get a live progress update from each host as it has finished patching with a break down of what updates were installed, success or failure.
 
@@ -58,7 +58,7 @@ The function returned a summary of the patch jobs for each host as output object
 Here is another example, if I ran the following command:
 
 ```ps
-$result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -AllowReboot -Retry 3
+$result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -AllowReboot -Attempts 3
 ```
 
 This time we're just targetting the one server, permitting the server to reboot if an update returned a hard/soft pending reboot, and allow a maximum of 3 retries if there were any installation failures.
@@ -68,17 +68,17 @@ At the end of the process, you will receive an output object similar to the belo
 ```
 PS C:\> $result
 
-ComputerName    : VEEAM
-Result          : Failure
-Updates         : {@{Name=7-Zip 22.01 (MSI-x64); ArticleID=PMPC-2022-07-18; EvaluationState=Error;
-                  ErrorCode=2147944003}, @{Name=2022-08 Security Update for Microsoft server operating system version 21H2 for x64-based Systems
-                  (KB5012170); ArticleID=5012170; EvaluationState=InstallComplete; ErrorCode=0}, @{Name=2022-08 Cumulative Update for .NET Framework 3.5 and 4.8 for
-                  Microsoft server operating system version 21H2 for x64 (KB5015733); ArticleID=5015733; EvaluationState=InstallComplete; ErrorCode=0},
-                  @{Name=Microsoft Edge 105.0.1343.33 (x64); ArticleID=PMPC-2022-09-09; EvaluationState=InstallComplete; ErrorCode=0}}
-IsPendingReboot : False
-NumberOfReboots : 1
-NumberOfRetries : 3
-RunspaceId      : af37488e-dad9-4d56-b72a-5aa642e589e4
+ComputerName     : VEEAM
+Result           : Failure
+Updates          : {@{Name=7-Zip 22.01 (MSI-x64); ArticleID=PMPC-2022-07-18; EvaluationState=Error;
+                   ErrorCode=2147944003}, @{Name=2022-08 Security Update for Microsoft server operating system version 21H2 for x64-based Systems
+                   (KB5012170); ArticleID=5012170; EvaluationState=InstallComplete; ErrorCode=0}, @{Name=2022-08 Cumulative Update for .NET Framework 3.5 and 4.8 for
+                   Microsoft server operating system version 21H2 for x64 (KB5015733); ArticleID=5015733; EvaluationState=InstallComplete; ErrorCode=0},
+                   @{Name=Microsoft Edge 105.0.1343.33 (x64); ArticleID=PMPC-2022-09-09; EvaluationState=InstallComplete; ErrorCode=0}}
+IsPendingReboot  : False
+NumberOfReboots  : 1
+NumberOfAttempts : 3
+RunspaceId       : af37488e-dad9-4d56-b72a-5aa642e589e4
 ```
 
 From the output above you can see the overall result from patching my Veeam server; the list of updates that were installed, whether there is a pending reboot, how many times the server was rebooted during patching, and how many times it retried.
