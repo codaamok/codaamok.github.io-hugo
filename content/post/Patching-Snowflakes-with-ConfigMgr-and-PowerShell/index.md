@@ -12,7 +12,7 @@ categories:
 - Do you have non-redundant application servers that must have a co-ordinated patching routine? Wish you used ConfigMgr for these but haven't figured out a way?
 - Do you have spaghetti or unfinished code that attempts to orchestrate complicated patching cycles?
 
-By "special patching", I mean the customer or application owners are terrified of the word "patching" and demand it be performed manually on a handful of finicky application servers out of fear of downtime. _(yeah, because hitting 'check for updates' manually reduces risk_ :unamused: _)_
+By "special patching," I mean the customer or application owners are terrified of the word "patching" and demand it be performed manually on a handful of finicky application servers out of fear of downtime. _(yeah, because hitting 'check for updates' manually reduces risk_ :unamused: _)_
 
 This leaves you feeling frustrated in having to perform tedious manual labour. Login, point, click, sit, wait etc.. You're also annoyed the business has invested in a behemoth like ConfigMgr, and aren't using it to its full potential just for these handful of special "snowflake" servers.
 
@@ -63,7 +63,7 @@ $result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -AllowReboot -Retry 3
 
 This time we're just targetting the one server, permitting the server to reboot if an update returned a hard/soft pending reboot, and allow a maximum of 3 retries if there were any installation failures.
 
-At the end of the process, you will receive an below output object similar to the below in the `$result` variable:
+At the end of the process, you will receive an output object similar to the below in the `$result` variable:
 
 ```
 PS C:\> $result
@@ -126,7 +126,7 @@ Here are a couple more example screenshots:
 > image of failure here  
 > image of success and no pending reboot here
 
-## Interatively use PSCMSnowflakePatching with the `-ChooseCollection` Parameter
+## Interactively use PSCMSnowflakePatching with the `-ChooseCollection` Parameter
 
 The `-ChooseCollection` is the only parameter that you can't use in an automated fashion. This is because it produces a pop-up `Out-GridView` window prompting you to choose a ConfigMgr device collection.
 
