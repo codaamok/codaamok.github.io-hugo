@@ -1,5 +1,5 @@
 ---
-title: "Patching Snowflakes With ConfigMgr and PowerShell"
+title: "Patching Snowflakes with ConfigMgr and PowerShell"
 date: 2022-09-18T10:22:56+01:00
 draft: false
 image: images/cover.jpg
@@ -12,11 +12,11 @@ categories:
 - Do you have non-redundant application servers that must have a co-ordinated patching routine? Wish you used ConfigMgr for these but haven't figured out a way?
 - Do you have spaghetti or unfinished code that attempts to orchestrate complicated patching cycles?
 
-By "special patching," I mean the customer or application owners are terrified of the word "patching" and demand it be performed manually on a handful of finicky application servers out of fear of downtime. _(yeah, because hitting 'check for updates' manually reduces risk_ :unamused: _)_
+By "special patching," I mean the customer or application owners are terrified of the word "patching", and they demand it be performed manually on a handful of finicky application servers out of fear of downtime. _(yeah, because hitting 'check for updates' manually reduces risk_ :unamused: _)_
 
 This leaves you feeling frustrated in having to perform tedious manual labour. Login, point, click, sit, wait etc.. You're also annoyed the business has invested in a behemoth like ConfigMgr, and aren't using it to its full potential just for these handful of special "snowflake" servers.
 
-This is where I tell you I wrote a PowerShell module that automates this! Which is funny because you can't automate it! You must do it manually! :laughing: but hang on let me explain..
+This is where I tell you I wrote a PowerShell module that automates this! Which is funny because you apparently shouldn't automate it! You must do it manually! :laughing: but hang on let me explain..
 
 ## PSCMSnowflakePatching
 
@@ -30,9 +30,11 @@ Using `Invoke-CMSnowflakePatching`, you can either:
 - b) give it a ConfigMgr device collection ID via the `-CollectionId` parameter
 - c) use the `-ChooseCollection` parameter and select a device collection from your environment
 
-For each host, it will remotely start the software update installation for all updates deployed to it. By default it doesn't reboot or make any retry attempts, but there parameters for this if you need it:
+For each host, it will remotely start the software update installation for all updates deployed to it. 
 
-- `-AllowReboot` switch will reboot the system(s) if any update returned an exit code indicating a reboot is required
+By default it doesn't reboot or make any retry attempts, but there are parameters for this if you need it:
+
+- `-AllowReboot` switch will reboot the system(s) if any updates require a restart
 - `-Attempts` parameter will let you indicate the maximum number of retries you would like the function to install updates if there was a failure in the previous attempt
 
 All hosts are processed in parallel, and you will get a live progress update from each host as it has finished patching with a break down of what updates were installed, success or failure.
@@ -57,8 +59,8 @@ The function returned a summary of the patch jobs for each host as output object
 
 Here is another example, if I ran the following command:
 
-```ps
-$result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -AllowReboot -Attempts 3
+```
+PS C:\> $result = Invoke-CMSnowflakePatching -ComputerName 'VEEAM' -AllowReboot -Attempts 3
 ```
 
 This time we're just targetting the one server, permitting the server to reboot if an update returned a hard/soft pending reboot, and allow a maximum of 3 retries if there were any installation failures.
@@ -123,8 +125,7 @@ Another benefit here is that you are using what you've paid for - ConfigMgr! Wit
 
 Here are a couple more example screenshots:
 
-> image of failure here  
-> image of success and no pending reboot here
+![Successful installation without any pending reboots](images/2.png) ![Failed installation and pending reboots](images/3.png)
 
 ## Interactively use PSCMSnowflakePatching with the `-ChooseCollection` Parameter
 
@@ -132,7 +133,7 @@ The `-ChooseCollection` is the only parameter that you can't use in an automated
 
 This is just demonstrating that you can still use `Invoke-CMSnowflakePatching` to 'manually' patch systems if you wish to, just without the hassle of login, point, click, etc. 
 
-> gif image of `-ChooseCollection`
+![Animated gif to show the -ChooseCollection parameter](images/4.gif)
 
 ## Why a module? Why not just a script?
 
