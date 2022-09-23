@@ -18,6 +18,8 @@ This leaves you feeling frustrated in having to perform tedious manual labour. L
 
 This is where I tell you I wrote a PowerShell module that automates this! Which is funny because you apparently shouldn't automate it! You must do it manually! :laughing: but hang on let me explain..
 
+Quick shout out to [Cody Mathis](https://twitter.com/CodyMathis123) who helped me soundboard a fair bit and provide some support on this :thumbsup:
+
 ## PSCMSnowflakePatching
 
 [PSCMSnowflakePatching](https://github.com/codaamok/PSCMSnowflakePatching) is a PowerShell module which contains a few functions but the primary interest is in [`Invoke-CMSnowflakePatching`](https://github.com/codaamok/PSCMSnowflakePatching/blob/main/docs/Invoke-CMSoftwareUpdateInstall.md). 
