@@ -119,7 +119,7 @@ ErrorCode       : 0
 
 With this output, you have a lot of opportunities. For example, you could feed this output to other scripts to:
 
-- Send an email as a report with the result
+- Send an email as a report with the result ([see this example here](https://github.com/codaamok/PSCMSnowflakePatching/blob/main/examples/SendMail.ps1))
 - Invoke some other custom remedial actions on the server or application it hosts
 - Send the data to a ticketing system using some web API, or raise an alert somewhere
 
