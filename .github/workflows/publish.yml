@@ -4,11 +4,11 @@ on:
   push:
     branch:
       - master
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, ':rocket:')"
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
