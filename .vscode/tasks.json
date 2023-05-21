@@ -6,7 +6,7 @@
         {
             "label": "Hugo Server",
             "type": "process",
-            "command": "/opt/homebrew/bin/hugo",
+            "command": "C:\\ProgramData\\chocolatey\\bin\\hugo.exe",
             "args": ["server", "-D", "-F", "--disableFastRender"],
             "isBackground": true,
             "presentation": {
